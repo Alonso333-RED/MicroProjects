@@ -1,5 +1,6 @@
 let pyodide;
 
+const statusEl = document.getElementById("status");
 const output = document.getElementById("output");
 const command = document.getElementById("command");
 
@@ -10,6 +11,11 @@ let historyIndex = -1;
 function write(text) {
     output.textContent += text;
     output.scrollTop = output.scrollHeight;
+}
+
+function setStatus(text, kind) {
+    statusEl.textContent = text;
+    statusEl.className = kind || "";
 }
 
 
@@ -24,14 +30,14 @@ async function startPython() {
     // Redirigir stdout de Python hacia nuestra terminal
     pyodide.setStdout({
         batched: (text) => {
-            write(text);
+            write(text + "\n");
         }
     });
 
     // Redirigir stderr también
     pyodide.setStderr({
         batched: (text) => {
-            write(text);
+            write(text + "\n");
         }
     });
 
@@ -39,6 +45,7 @@ async function startPython() {
     write("Python Web Console\n");
     write("Escribe una expresión o instrucción Python.\n\n");
 
+    setStatus("Listo", "waiting");
     command.focus();
 }
 
@@ -119,11 +126,12 @@ command.addEventListener("keydown", async (event) => {
 
     write(`>>> ${code}\n`);
 
+    setStatus("Ejecutando...", "");
 
     try {
 
         const result = await pyodide.runPythonAsync(code);
-        
+
         if (result !== undefined && result !== null) {
             write(`${result}\n`);
         }
@@ -135,11 +143,13 @@ command.addEventListener("keydown", async (event) => {
 
 
     write("\n");
+    setStatus("Listo", "waiting");
 });
 
 
 startPython().catch(error => {
 
     write(`\nERROR:\n${error}\n`);
+    setStatus("Error al cargar", "error");
 
 });

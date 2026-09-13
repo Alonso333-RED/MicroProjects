@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+    <link rel="stylesheet" href="./style.css">
+    <title>Python Console</title>
+
+</head>
+
+<body>
+
+<div id="app">
+
+    <header>
+        <h1>Python Console</h1>
+        <span id="status">Cargando Pyodide...</span>
+    </header>
+
+    <p class="panel-title">Consola</p>
+
+    <div id="output"></div>
+
+    <div id="input-line">
+        <span id="prompt">&gt;&gt;&gt;</span>
+
+        <input
+            id="command"
+            type="text"
+            autocomplete="off"
+            autofocus
+        >
+    </div>
+
+    <section id="docs">
+
+        <h2>¿Cómo funciona esto?</h2>
+        <p>
+            Esta página carga Pyodide, una build de CPython (el intérprete
+            normal de Python) compilada a WebAssembly, y con eso arma una
+            consola interactiva tipo REPL directamente en el navegador. No
+            hay ningún servidor ejecutando tu código: todo el intérprete de
+            Python corre dentro de esta misma pestaña.
+        </p>
+
+        <h3>Cómo usarla</h3>
+        <ul>
+            <li>Escribe cualquier expresión o instrucción y presiona Enter.</li>
+            <li>
+                Las expresiones muestran su resultado automáticamente, igual
+                que en el REPL real de Python; usa <code>print()</code> si
+                quieres forzar una salida.
+            </li>
+            <li>Usa las flechas ↑ / ↓ para navegar el historial de comandos.</li>
+            <li>
+                Puedes definir funciones, usar <code>import</code> con la
+                librería estándar, manejar excepciones, etc. — es Python de
+                verdad, no una simulación.
+            </li>
+            <li>
+                Si llamas a <code>input()</code>, Pyodide abre el cuadro de
+                diálogo nativo <code>window.prompt()</code> del navegador
+                para pedirte el valor (es el comportamiento por defecto de
+                Pyodide, no algo que arma esta página).
+            </li>
+        </ul>
+
+        <h3>Estructura de archivos</h3>
+        <pre><code>tu-proyecto/
+├── index.html
+├── style.css
+├── console.js
+└── pyodide/    &lt;- runtime de Pyodide (WASM + stdlib de Python)</code></pre>
+
+        <h3>Lo que hace console.js</h3>
+        <ol>
+            <li>Carga Pyodide con <code>loadPyodide()</code>.</li>
+            <li>
+                Redirige stdout/stderr de Python hacia la consola con
+                <code>pyodide.setStdout()</code> / <code>setStderr()</code>.
+            </li>
+            <li>
+                Por cada línea que escribes, la corre con
+                <code>pyodide.runPythonAsync(codigo)</code> y muestra el
+                resultado si la expresión devolvió algo.
+            </li>
+        </ol>
+
+        <div class="saber-mas">
+            <h3>Saber más</h3>
+
+            <a href="https://alonso333-red.github.io/AlonsoSpace/" target="_blank" rel="noopener noreferrer">
+                <strong>Sobre el autor</strong>
+            </a>
+
+            <a href="https://pyodide.org/" target="_blank" rel="noopener noreferrer">
+                <strong>Sobre Pyodide</strong>
+            </a>
+
+            <a href="https://python.org/" target="_blank" rel="noopener noreferrer">
+                <strong>Sobre Python</strong>
+            </a>
+
+            <a href="https://webassembly.org/" target="_blank" rel="noopener noreferrer">
+                <strong>Sobre WebAssembly</strong>
+            </a>
+        </div>
+
+    </section>
+
+</div>
+
+<script src="./pyodide/pyodide.js"></script>
+<script src="./console.js"></script>
+
+</body>
+
+</html>

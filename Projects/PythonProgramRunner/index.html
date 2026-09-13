@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+    <link rel="stylesheet" href="./style.css">
+    <title>Python Program Runner</title>
+
+</head>
+
+<body>
+
+<div id="app">
+
+    <header>
+        <h1>Python Program Runner</h1>
+        <span id="status">Cargando Pyodide...</span>
+    </header>
+
+    <div class="buttons">
+        <button id="run-btn" disabled>&#9654; Ejecutar</button>
+    </div>
+
+    <p class="panel-title">Consola</p>
+
+    <div id="output"></div>
+
+    <div id="input-line">
+        <span id="prompt">&raquo;</span>
+
+        <input
+            id="stdin"
+            type="text"
+            autocomplete="off"
+            disabled
+        >
+    </div>
+
+    <section id="docs">
+
+        <h2>¿Cómo funciona esto?</h2>
+        <p>
+            Pyodide es una build de CPython (el intérprete normal de Python)
+            compilada a WebAssembly. Al cargarla, el navegador descarga un
+            intérprete de Python completo y lo corre dentro de la misma
+            pestaña — no hay ningún servidor ejecutando tu código, todo pasa
+            en tu máquina.
+        </p>
+
+        <h3>Estructura de archivos</h3>
+        <pre><code>tu-proyecto/
+├── index.html
+├── style.css
+├── runner.js
+├── pyodide/            &lt;- runtime de Pyodide (WASM + stdlib de Python)
+└── program/
+    ├── manifest.json   &lt;- qué archivos .py cargar y cuál es el de entrada
+    └── main.py         &lt;- tu programa, un script normal e independiente</code></pre>
+
+        <h3>Lo que hace runner.js, en orden</h3>
+        <ol>
+            <li>Carga Pyodide con <code>loadPyodide()</code>.</li>
+            <li>
+                Redirige la salida de Python hacia la consola con
+                <code>pyodide.setStdout()</code> / <code>setStderr()</code>.
+            </li>
+            <li>
+                Descarga los archivos listados en <code>manifest.json</code> y
+                los escribe en el sistema de archivos virtual de Pyodide con
+                <code>pyodide.FS.writeFile()</code>.
+            </li>
+            <li>
+                Ejecuta el archivo de entrada leyéndolo con <code>open()</code>
+                y corriéndolo con <code>exec()</code>, tal como lo haría un
+                intérprete real desde la terminal.
+            </li>
+        </ol>
+
+        <h3>El truco para que input() bloquee de verdad</h3>
+        <p>
+            Normalmente en un navegador no puedes "congelar" la ejecución a
+            mitad de camino a esperar que el usuario escriba algo, sin
+            recurrir a Web Workers. Esta build de Pyodide soporta
+            <strong>JS Promise Integration (JSPI)</strong>, una función
+            experimental de WebAssembly que sí lo permite:
+        </p>
+        <ul>
+            <li>
+                El programa se ejecuta llamando a una función Python
+                <code>async</code> con <code>.callPromising()</code> en vez
+                de esperarla normalmente.
+            </li>
+            <li>
+                Dentro de esa función, <code>pyodide.ffi.run_sync(promesa)</code>
+                pausa la pila de Python hasta que una Promise de JavaScript
+                se resuelve, sin trabar el navegador.
+            </li>
+            <li>
+                Se reemplaza <code>builtins.input</code> por una versión que
+                usa <code>run_sync</code> sobre una función de JS que muestra
+                el prompt, habilita el campo de texto y resuelve la promesa
+                cuando el usuario presiona Enter.
+            </li>
+        </ul>
+
+        <details>
+            <summary>Ver el patrón mínimo en código</summary>
+            <pre><code>// JS: función que espera al usuario
+function getUserInput(prompt) {
+    return new Promise((resolve) => {
+        mostrarPrompt(prompt);
+        onEnterPresionado = (texto) => resolve(texto);
+    });
+}
+pyodide.globals.set("__js_get_input", getUserInput);
+
+// Python: input() reemplazado, usando run_sync
+pyodide.runPython(`
+async def correr(archivo):
+    from pyodide.ffi import run_sync
+    import builtins
+
+    def mi_input(prompt=""):
+        return run_sync(__js_get_input(prompt))
+
+    builtins.input = mi_input
+    exec(open(archivo).read())
+`);
+
+// Se necesita callPromising() para habilitar JSPI en esa llamada
+await pyodide.globals.get("correr").callPromising("main.py");</code></pre>
+        </details>
+
+        <h3>¿Cómo cargo mi propio programa?</h3>
+        <ul>
+            <li>Reemplaza <code>program/main.py</code> por tu script.</li>
+            <li>
+                Si usas varios archivos <code>.py</code>, agrégalos a la
+                lista <code>"files"</code> de <code>manifest.json</code>
+                (se importan entre sí con normalidad).
+            </li>
+            <li>No hace falta tocar <code>runner.js</code> para esto.</li>
+        </ul>
+
+        <h3>Requisitos</h3>
+        <p>
+            JSPI es una función relativamente nueva de WebAssembly; funciona
+            en versiones recientes de Chrome y Edge. Si el navegador no la
+            soporta, <code>runner.js</code> lo detecta y muestra un mensaje de
+            error explicándolo en la consola de la página. El aviso de
+            "SharedArrayBuffer" que a veces aparece en la consola de
+            desarrollador del navegador es solo una advertencia interna de
+            Pyodide y no afecta el funcionamiento.
+        </p>
+
+        <div class="saber-mas">
+            <h3>Saber más</h3>
+
+            <a href="https://alonso333-red.github.io/AlonsoSpace/" target="_blank" rel="noopener noreferrer">
+                <strong>Sobre el autor</strong>
+            </a>
+
+            <a href="https://pyodide.org/" target="_blank" rel="noopener noreferrer">
+                <strong>Sobre Pyodide</strong>
+            </a>
+
+            <a href="https://python.org/" target="_blank" rel="noopener noreferrer">
+                <strong>Sobre Python</strong>
+            </a>
+
+            <a href="https://webassembly.org/" target="_blank" rel="noopener noreferrer">
+                <strong>Sobre WebAssembly</strong>
+            </a>
+        </div>
+    </section>
+
+</div>
+
+<script src="./pyodide/pyodide.js"></script>
+<script src="./runner.js"></script>
+
+</body>
+
+</html>
