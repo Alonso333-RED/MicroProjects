@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://kghbxujo4wnp"]
+
+[ext_resource type="Script" uid="uid://lf6w7d30vndd" path="res://game.gd" id="1_wbfu4"]
+[ext_resource type="Texture2D" uid="uid://cvh04mnpuan0k" path="res://icon.svg" id="2_xkndl"]
+
+[node name="Game" type="Node2D" unique_id=1460056920]
+script = ExtResource("1_wbfu4")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=865736964]
+offset_right = 2000.0
+offset_bottom = 2000.0
+texture = ExtResource("2_xkndl")
+
+[node name="Players" type="Node2D" parent="." unique_id=1249184067]
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=1696716428]
+_spawnable_scenes = PackedStringArray("uid://btk2yg321ue15")
+spawn_path = NodePath("../Players")

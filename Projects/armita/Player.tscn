@@ -1,0 +1,33 @@
+[gd_scene format=3 uid="uid://btk2yg321ue15"]
+
+[ext_resource type="Script" uid="uid://dlpmdjbtawms6" path="res://player.gd" id="1_kpjcp"]
+[ext_resource type="Texture2D" uid="uid://cvh04mnpuan0k" path="res://icon.svg" id="1_xhfnw"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_y41b4"]
+radius = 50.0
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_kpjcp"]
+
+[node name="CharacterBody2D" type="CharacterBody2D" unique_id=801687566]
+script = ExtResource("1_kpjcp")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2042345171]
+shape = SubResource("CircleShape2D_y41b4")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=125951404]
+scale = Vector2(0.781, 0.781)
+texture = ExtResource("1_xhfnw")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1862813721]
+replication_config = SubResource("SceneReplicationConfig_kpjcp")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=574240752]
+
+[node name="VirtualJoystick" type="VirtualJoystick" parent="." unique_id=585094892]
+offset_left = -1000.0
+offset_top = -250.0
+offset_right = -500.0
+offset_bottom = 250.0
+joystick_mode = 1
+joystick_size = 250.0
+tip_size = 250.0

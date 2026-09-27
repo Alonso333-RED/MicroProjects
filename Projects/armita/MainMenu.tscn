@@ -1,0 +1,183 @@
+[gd_scene format=3 uid="uid://bmvob1fau7d50"]
+
+[ext_resource type="Script" uid="uid://dyee377qpypt0" path="res://main_menu.gd" id="1_i26rj"]
+
+[node name="root" type="Control" unique_id=15439758]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_i26rj")
+
+[node name="rootContainer" type="HBoxContainer" parent="." unique_id=2121976232]
+layout_mode = 0
+offset_right = 2000.0
+offset_bottom = 1000.0
+
+[node name="leftContainer" type="VBoxContainer" parent="rootContainer" unique_id=178240665]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="infoContainer" type="VBoxContainer" parent="rootContainer/leftContainer" unique_id=570809591]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Tittle" type="Label" parent="rootContainer/leftContainer/infoContainer" unique_id=358081432]
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 128
+text = "Armita"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="detailsContainer" type="VBoxContainer" parent="rootContainer/leftContainer/infoContainer" unique_id=539537123]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Tittle2" type="Label" parent="rootContainer/leftContainer/infoContainer/detailsContainer" unique_id=1548126558]
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 32
+text = "v1.0.0 beta"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="LinkButton" type="LinkButton" parent="rootContainer/leftContainer/infoContainer/detailsContainer" unique_id=53847584]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 32
+text = "Creado por Alonso"
+uri = "https://alonso333-red.github.io/AlonsoSpace/"
+
+[node name="playContainer" type="VBoxContainer" parent="rootContainer/leftContainer" unique_id=1275245743]
+layout_mode = 2
+size_flags_vertical = 3
+alignment = 1
+
+[node name="connectInstruction" type="Label" parent="rootContainer/leftContainer/playContainer" unique_id=1510005454]
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_vertical = 7
+theme_override_font_sizes/font_size = 64
+text = "Conectarse a una partida"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="ipLineEdit" type="LineEdit" parent="rootContainer/leftContainer/playContainer" unique_id=1114440299]
+layout_mode = 2
+size_flags_vertical = 7
+theme_override_font_sizes/font_size = 64
+placeholder_text = "IP del servidor"
+
+[node name="portLineEdit" type="LineEdit" parent="rootContainer/leftContainer/playContainer" unique_id=244580074]
+layout_mode = 2
+size_flags_vertical = 7
+theme_override_font_sizes/font_size = 64
+placeholder_text = "Puerto [7000]"
+
+[node name="playButtons" type="HBoxContainer" parent="rootContainer/leftContainer/playContainer" unique_id=1206144869]
+layout_mode = 2
+size_flags_vertical = 3
+alignment = 1
+
+[node name="connectButton" type="Button" parent="rootContainer/leftContainer/playContainer/playButtons" unique_id=63885212]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 7
+theme_override_font_sizes/font_size = 48
+text = "Conectar"
+
+[node name="disconnectButton" type="Button" parent="rootContainer/leftContainer/playContainer/playButtons" unique_id=1450867879]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 7
+theme_override_font_sizes/font_size = 48
+text = "Desconectar"
+
+[node name="hostButton" type="Button" parent="rootContainer/leftContainer/playContainer/playButtons" unique_id=416442412]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 7
+theme_override_font_sizes/font_size = 48
+text = "Hospedar"
+
+[node name="rightContainer" type="VBoxContainer" parent="rootContainer" unique_id=1681461919]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="upperContainer" type="HBoxContainer" parent="rootContainer/rightContainer" unique_id=1062771268]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="weaponContainer" type="VBoxContainer" parent="rootContainer/rightContainer/upperContainer" unique_id=1265823090]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="weaponLabelScroll" type="ScrollContainer" parent="rootContainer/rightContainer/upperContainer/weaponContainer" unique_id=1844224770]
+custom_minimum_size = Vector2(0, 250)
+layout_mode = 2
+
+[node name="weaponLabel" type="Label" parent="rootContainer/rightContainer/upperContainer/weaponContainer/weaponLabelScroll" unique_id=1437668457]
+custom_minimum_size = Vector2(125, 125)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 7
+theme_override_font_sizes/font_size = 64
+text = "Tu Arma:"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="weaponScroll" type="ScrollContainer" parent="rootContainer/rightContainer/upperContainer/weaponContainer" unique_id=1582901865]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="weaponGrid" type="GridContainer" parent="rootContainer/rightContainer/upperContainer/weaponContainer/weaponScroll" unique_id=581636853]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="classContainer" type="VBoxContainer" parent="rootContainer/rightContainer/upperContainer" unique_id=610388724]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="classLabelScroll" type="ScrollContainer" parent="rootContainer/rightContainer/upperContainer/classContainer" unique_id=1047545130]
+custom_minimum_size = Vector2(0, 250)
+layout_mode = 2
+
+[node name="classLabel" type="Label" parent="rootContainer/rightContainer/upperContainer/classContainer/classLabelScroll" unique_id=1266507809]
+custom_minimum_size = Vector2(125, 125)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 7
+theme_override_font_sizes/font_size = 64
+text = "Tu Clase"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="classScroll" type="ScrollContainer" parent="rootContainer/rightContainer/upperContainer/classContainer" unique_id=2018307345]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="classGrid" type="GridContainer" parent="rootContainer/rightContainer/upperContainer/classContainer/classScroll" unique_id=1322642215]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Button" type="Button" parent="rootContainer/rightContainer" unique_id=89258131]
+custom_maximum_size = Vector2(-1, 125)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 64
+text = "Jugar"
